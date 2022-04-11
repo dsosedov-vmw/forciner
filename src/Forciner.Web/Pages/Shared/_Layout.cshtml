@@ -25,7 +25,7 @@
                         <a href="twocolumn2.html">Two Column #2</a>
                         <a href="onecolumn.html">One Column</a>
                         <a href="threecolumn.html">Three Column</a>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity is {IsAuthenticated: true })
                         {
                             <a asp-area="" asp-page="/Account/Logout">Sign Out</a>
                         }
