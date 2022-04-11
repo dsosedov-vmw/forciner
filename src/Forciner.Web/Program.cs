@@ -13,12 +13,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    Secure = CookieSecurePolicy.Always,
+});
 
 app.Run();
