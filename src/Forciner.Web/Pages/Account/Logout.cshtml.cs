@@ -10,10 +10,12 @@ namespace Forciner.Web.Pages.Account;
 public class LogoutModel : PageModel
 {
     private readonly ILogger<LogoutModel> _logger;
+    private readonly IConfiguration _configuration;
 
-    public LogoutModel(ILogger<LogoutModel> logger)
+    public LogoutModel(ILogger<LogoutModel> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task OnGet()
@@ -22,7 +24,7 @@ public class LogoutModel : PageModel
             // Indicate here where Auth0 should redirect the user after a logout.
             // Note that the resulting absolute Uri must be added to the
             // **Allowed Logout URLs** settings for the app.
-            .WithRedirectUri("https://localhost:8080")
+            .WithRedirectUri(_configuration["Auth0_RedirectUri"])
             .Build();
 
         await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);

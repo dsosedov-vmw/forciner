@@ -7,10 +7,12 @@ namespace Forciner.Web.Pages.Account;
 public class LoginModel : PageModel
 {
     private readonly ILogger<LoginModel> _logger;
+    private readonly IConfiguration _configuration;
 
-    public LoginModel(ILogger<LoginModel> logger)
+    public LoginModel(ILogger<LoginModel> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task OnGet()
@@ -19,7 +21,7 @@ public class LoginModel : PageModel
             // Indicate here where Auth0 should redirect the user after a login.
             // Note that the resulting absolute Uri must be added to the
             // **Allowed Callback URLs** settings for the app.
-            .WithRedirectUri("https://localhost:8080")
+            .WithRedirectUri(_configuration["Auth0_RedirectUri"])
             .Build();
 
         await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
