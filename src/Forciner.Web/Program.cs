@@ -5,10 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.WebHost.UseKestrel(o => o.AddServerHeader = false);
+
 builder.Services
     .AddAuth0WebAppAuthentication(options => {
-        options.Domain = builder.Configuration["Auth0:Domain"];
-        options.ClientId = builder.Configuration["Auth0:ClientId"];
+        options.Domain = builder.Configuration["Auth0_Domain"];
+        options.ClientId = builder.Configuration["Auth0_ClientId"];
     });
 
 var app = builder.Build();
@@ -21,8 +23,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+//app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = context =>
+    {
+        context.Context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+        context.Context.Response.Headers["Content-Security-Policy"] = "default-src https:";
+        context.Context.Response.Headers["Cache-Control"] = "no-cache, no-store";
+        context.Context.Response.Headers["Pragma"] = "no-cache";
+        context.Context.Response.Headers["Expires"] = "-1";
+    }
+});
 
 app.UseRouting();
 
@@ -34,6 +46,15 @@ app.MapRazorPages();
 app.UseCookiePolicy(new CookiePolicyOptions
 {
     Secure = CookieSecurePolicy.Always,
+});
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["Content-Security-Policy"] = "default-src https:";
+    context.Response.Headers["Cache-Control"] = "no-cache, no-store";
+    context.Response.Headers["Pragma"] = "no-cache";
+    context.Response.Headers["Expires"] = "-1";
+    await next.Invoke();
 });
 
 app.Run();
