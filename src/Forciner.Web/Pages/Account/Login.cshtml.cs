@@ -1,5 +1,6 @@
 using Auth0.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Forciner.Web.Pages.Account;
@@ -15,7 +16,7 @@ public class LoginModel : PageModel
         _configuration = configuration;
     }
 
-    public async Task OnGet()
+    public async Task<IActionResult> OnGet()
     {
         var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
             // Indicate here where Auth0 should redirect the user after a login.
@@ -25,5 +26,7 @@ public class LoginModel : PageModel
             .Build();
 
         await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+
+        return new EmptyResult();
     }
 }
