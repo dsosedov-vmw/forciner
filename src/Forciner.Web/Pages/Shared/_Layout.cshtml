@@ -20,13 +20,14 @@
                         <a asp-area="" asp-page="/Index" id="logo">Minimaxing</a>
                     </h1>
                     <nav id="nav">
+                        <a asp-area="" asp-page="/BadPage">Bad page</a>
                         <a asp-area="" asp-page="/Index" class="current-page-item">Homepage</a>
-                        <a href="twocolumn1.html">Two Column #1</a>
-                        <a href="twocolumn2.html">Two Column #2</a>
-                        <a href="onecolumn.html">One Column</a>
-                        <a href="threecolumn.html">Three Column</a>
-                        @if (User.Identity is {IsAuthenticated: true })
+                        @if (User.Identity is { IsAuthenticated: true })
                         {
+                            <a href="twocolumn1.html">Two Column #1</a>
+                            <a href="twocolumn2.html">Two Column #2</a>
+                            <a href="onecolumn.html">One Column</a>
+                            <a href="threecolumn.html">Three Column</a>
                             <a asp-area="" asp-page="/Account/Logout">Sign Out</a>
                         }
                         else
