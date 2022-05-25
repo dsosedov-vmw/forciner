@@ -1,2 +1,20 @@
 @page
 @model BadPageModel
+
+@section navigation
+{
+    <a asp-area="" asp-page="/BadPage" class="current-page-item">Bad page</a>
+    <a asp-area="" asp-page="/Index">Homepage</a>
+    @if (User.Identity is { IsAuthenticated: true })
+    {
+        <a href="twocolumn1.html">Two Column #1</a>
+        <a href="twocolumn2.html">Two Column #2</a>
+        <a href="onecolumn.html">One Column</a>
+        <a href="threecolumn.html">Three Column</a>
+        <a asp-area="" asp-page="/Account/Logout">Sign Out</a>
+    }
+    else
+    {
+        <a asp-area="" asp-page="/Account/Login">Sign Up/In</a>
+    }
+}
